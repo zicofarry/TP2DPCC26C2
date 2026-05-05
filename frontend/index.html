@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indie Rock Vault</title>
+    <meta name="description" content="Koleksi album indie rock legendaris - Katalog musik pilihan kurator">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #070710;
+            --bg-secondary: #0d0d1a;
+            --bg-card: rgba(16, 16, 32, 0.65);
+            --bg-card-hover: rgba(24, 24, 48, 0.8);
+            --accent-gold: #d4a843;
+            --accent-amber: #f0b429;
+            --accent-orange: #e87a3a;
+            --text-primary: #f0ece4;
+            --text-secondary: #8a8a9e;
+            --text-muted: #55556a;
+            --border-subtle: rgba(212, 168, 67, 0.12);
+            --border-hover: rgba(212, 168, 67, 0.35);
+            --glow-gold: rgba(212, 168, 67, 0.25);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Grain overlay */
+        .grain-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
+        }
+
+        /* Ambient glows */
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+            animation: glowPulse 8s ease-in-out infinite alternate;
+        }
+        .bg-glow-1 {
+            width: 500px; height: 500px;
+            top: -100px; left: -100px;
+            background: radial-gradient(circle, rgba(212,168,67,0.08), transparent 70%);
+        }
+        .bg-glow-2 {
+            width: 400px; height: 400px;
+            bottom: 20%; right: -50px;
+            background: radial-gradient(circle, rgba(232,122,58,0.06), transparent 70%);
+            animation-delay: -4s;
+        }
+
+        @keyframes glowPulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.3); opacity: 1; }
+        }
+
+        /* ========== HEADER ========== */
+        .hero {
+            position: relative;
+            z-index: 1;
+            padding: 60px 24px 50px;
+            border-bottom: 1px solid var(--border-subtle);
+            background: linear-gradient(180deg, rgba(212,168,67,0.04) 0%, transparent 60%);
+        }
+
+        .hero-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hero-text {
+            flex: 1;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(212,168,67,0.1);
+            border: 1px solid rgba(212,168,67,0.2);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .badge-dot {
+            width: 6px; height: 6px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-gold) 50%, var(--accent-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin-bottom: 28px;
+            font-weight: 300;
+        }
+
+        /* Owner Card */
+        .owner-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle);
+            padding: 14px 22px;
+            border-radius: var(--radius-md);
+            transition: all 0.3s ease;
+        }
+
+        .owner-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 0 30px var(--glow-gold);
+            transform: translateY(-2px);
+        }
+
+        .owner-avatar {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            color: #0a0a0f;
+        }
+
+        .owner-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .owner-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2.5px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+        }
+
+        .owner-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .owner-nim {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== VINYL RECORD ========== */
+        .vinyl-container {
+            flex-shrink: 0;
+            animation: fadeInRight 1s ease-out 0.3s both;
+        }
+
+        .vinyl-record {
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle,
+                #1a1a1a 0%, #0d0d0d 25%, #1a1a1a 26%, #111 35%,
+                #1a1a1a 36%, #0f0f0f 45%, #1a1a1a 46%, #111 100%
+            );
+            position: relative;
+            animation: vinylSpin 8s linear infinite;
+            box-shadow:
+                0 0 0 3px #2a2a2a,
+                0 0 0 6px #1a1a1a,
+                0 0 40px rgba(0,0,0,0.5),
+                inset 0 0 30px rgba(0,0,0,0.3);
+        }
+
+        .vinyl-label {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .vinyl-hole {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .vinyl-shine {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%);
+        }
+
+        @keyframes vinylSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== MAIN ========== */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 50px 24px 80px;
+        }
+
+        /* ========== SECTION HEADER ========== */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .section-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: var(--text-primary);
+        }
+
+        .equalizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 28px;
+        }
+
+        .eq-bar {
+            width: 4px;
+            background: linear-gradient(to top, var(--accent-gold), var(--accent-orange));
+            border-radius: 2px;
+            animation: eqBounce 1.2s ease-in-out infinite;
+        }
+        .eq-bar:nth-child(1) { height: 10px; animation-delay: 0s; }
+        .eq-bar:nth-child(2) { height: 20px; animation-delay: -0.2s; }
+        .eq-bar:nth-child(3) { height: 14px; animation-delay: -0.4s; }
+        .eq-bar:nth-child(4) { height: 24px; animation-delay: -0.6s; }
+        .eq-bar:nth-child(5) { height: 8px; animation-delay: -0.8s; }
+
+        @keyframes eqBounce {
+            0%, 100% { transform: scaleY(0.4); }
+            50% { transform: scaleY(1.2); }
+        }
+
+        /* ========== ALBUM LIST ========== */
+        .album-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .album-item {
+            display: grid;
+            grid-template-columns: 36px 1fr auto;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            transition: all 0.25s ease;
+            animation: fadeInUp 0.4s ease-out both;
+            cursor: default;
+        }
+
+        .album-item:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+            transform: translateX(4px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .album-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .album-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .album-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .album-artist {
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            font-weight: 500;
+        }
+
+        .album-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .album-year {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            background: rgba(255,255,255,0.05);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .album-genre {
+            font-size: 0.72rem;
+            color: var(--accent-gold);
+            background: rgba(212,168,67,0.08);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(212,168,67,0.12);
+        }
+
+        /* ========== ADD ALBUM FORM ========== */
+        .add-section {
+            margin-top: 60px;
+            padding-top: 50px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .add-section h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .add-form {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 28px;
+            transition: border-color 0.3s ease;
+        }
+
+        .add-form:focus-within {
+            border-color: var(--border-hover);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input::placeholder { color: var(--text-muted); }
+
+        .form-group input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px var(--glow-gold);
+            background: rgba(255,255,255,0.06);
+        }
+
+        .btn-submit {
+            position: relative;
+            width: 100%;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0a0a0f;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212,168,67,0.35);
+        }
+
+        .btn-submit:active { transform: translateY(0); }
+
+        .btn-submit .btn-glow {
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-submit:hover .btn-glow { left: 100%; }
+
+        .form-message {
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: none;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .form-message.success {
+            display: block;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+
+        .form-message.error {
+            display: block;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            color: #f87171;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 24px;
+            border-top: 1px solid var(--border-subtle);
+            margin-top: 20px;
+        }
+
+        .footer-eq {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 3px;
+            height: 20px;
+            margin-bottom: 16px;
+        }
+
+        .footer-eq .eq-bar {
+            width: 3px;
+            background: linear-gradient(to top, var(--text-muted), var(--text-secondary));
+        }
+        .footer-eq .eq-bar:nth-child(1) { height: 6px; animation-delay: -0.1s; }
+        .footer-eq .eq-bar:nth-child(2) { height: 14px; animation-delay: -0.3s; }
+        .footer-eq .eq-bar:nth-child(3) { height: 10px; animation-delay: -0.5s; }
+        .footer-eq .eq-bar:nth-child(4) { height: 18px; animation-delay: -0.7s; }
+        .footer-eq .eq-bar:nth-child(5) { height: 8px; animation-delay: -0.9s; }
+        .footer-eq .eq-bar:nth-child(6) { height: 12px; animation-delay: -0.2s; }
+        .footer-eq .eq-bar:nth-child(7) { height: 6px; animation-delay: -0.4s; }
+
+        .footer p {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        /* ========== LOADING ========== */
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+            gap: 14px;
+        }
+
+        .spinner {
+            width: 36px; height: 36px;
+            border: 3px solid rgba(212,168,67,0.15);
+            border-top-color: var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .hero { padding: 40px 18px 36px; }
+            .hero-content { flex-direction: column; text-align: center; }
+            .hero-desc { margin-left: auto; margin-right: auto; }
+            .owner-card { justify-content: center; }
+            .vinyl-container { order: -1; }
+            .vinyl-record { width: 140px; height: 140px; }
+            .vinyl-label { width: 50px; height: 50px; }
+            .form-row { grid-template-columns: 1fr; }
+            .add-form { padding: 20px; }
+            .album-item { grid-template-columns: 30px 1fr; gap: 12px; padding: 14px 16px; }
+            .album-meta { display: none; }
+            .album-artist::after {
+                content: attr(data-meta);
+                color: var(--text-secondary);
+                font-size: 0.75rem;
+                margin-left: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.8rem; }
+            .container { padding: 30px 16px 60px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain-overlay"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- HEADER -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    LIVE COLLECTION
+                </div>
+                <h1 id="catalog-title">Memuat...</h1>
+                <p id="catalog-desc" class="hero-desc">Menghubungkan ke server...</p>
+                <div id="owner-info" class="owner-card">
+                    <div class="owner-avatar" id="owner-avatar">?</div>
+                    <div class="owner-details">
+                        <span class="owner-label">KURATOR</span>
+                        <span id="owner-name" class="owner-name">Memuat...</span>
+                        <span id="owner-nim" class="owner-nim">NIM: ...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="vinyl-container">
+                <div class="vinyl-record">
+                    <div class="vinyl-label">
+                        <div class="vinyl-hole"></div>
+                    </div>
+                    <div class="vinyl-shine"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="container">
+        <section class="collection-section">
+            <div class="section-header">
+                <h2>KOLEKSI ALBUM</h2>
+                <div class="equalizer">
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                </div>
+            </div>
+            <div id="album-list" class="album-list">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <span class="loading-text">LOADING ALBUMS...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADD ALBUM -->
+        <section class="add-section">
+            <h2>TAMBAH ALBUM BARU</h2>
+            <form id="add-form" class="add-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="input-album">Nama Album</label>
+                        <input type="text" id="input-album" placeholder="contoh: Humbug" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="input-artis">Artis</label>
+                        <input type="text" id="input-artis" placeholder="contoh: Arctic Monkeys" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="input-tahun">Tahun Rilis</label>
+                        <input type="number" id="input-tahun" placeholder="contoh: 2009" min="1950" max="2030">
+                    </div>
+                    <div class="form-group">
+                        <label for="input-genre">Genre</label>
+                        <input type="text" id="input-genre" placeholder="contoh: Desert Rock" value="Indie Rock">
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit" id="btn-submit">
+                    <span class="btn-text">+ Tambah ke Koleksi</span>
+                    <span class="btn-glow"></span>
+                </button>
+            </form>
+            <div id="form-message" class="form-message"></div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-eq">
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+            <div class="eq-bar"></div>
+        </div>
+        <p>INDIE ROCK VAULT // PRAKTIKUM CLOUD COMPUTING</p>
+    </footer>
+
+    <script>
+        // =============================================================
+        // KONFIGURASI API URL
+        // =============================================================
+        const API_URL = 'http://zico-api-36.f9e7hggfhvhuccb7.southeastasia.azurecontainer.io:5000/api';
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Render album list
+        function renderAlbums(items) {
+            const list = document.getElementById('album-list');
+            list.innerHTML = '';
+
+            if (!items || items.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:40px;font-style:italic;">Belum ada album dalam koleksi.</p>';
+                return;
+            }
+
+            items.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = 'album-item';
+                el.style.animationDelay = `${index * 0.05}s`;
+
+                const num = String(index + 1).padStart(2, '0');
+
+                if (typeof item === 'string') {
+                    el.innerHTML = `
+                        <span class="album-num">${num}</span>
+                        <div class="album-main">
+                            <span class="album-title">${escapeHtml(item)}</span>
+                        </div>
+                    `;
+                } else {
+                    const album = item.album || 'Unknown';
+                    const artist = item.artis || 'Unknown';
+                    const year = item.tahun || '-';
+                    const genre = item.genre || 'Indie Rock';
+
+                    el.innerHTML = `
+                        <span class="album-num">${num}</span>
+                        <div class="album-main">
+                            <span class="album-title">${escapeHtml(album)}</span>
+                            <span class="album-artist" data-meta="${escapeHtml(String(year) + ' / ' + genre)}">${escapeHtml(artist)}</span>
+                        </div>
+                        <div class="album-meta">
+                            <span class="album-year">${escapeHtml(String(year))}</span>
+                            <span class="album-genre">${escapeHtml(genre)}</span>
+                        </div>
+                    `;
+                }
+
+                list.appendChild(el);
+            });
+        }
+
+        // Load data from API
+        function loadData() {
+            fetch(`${API_URL}/info`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Response not ok');
+                    return res.json();
+                })
+                .then(data => {
+                    document.getElementById('catalog-title').textContent = data.judul_katalog || 'Indie Rock Vault';
+                    document.getElementById('catalog-desc').textContent = data.deskripsi || 'Koleksi album indie rock';
+                    document.getElementById('owner-name').textContent = data.pemilik || 'Misterius';
+                    document.getElementById('owner-nim').textContent = 'NIM: ' + (data.nim || '00000000');
+
+                    // Set avatar initial
+                    const name = data.pemilik || 'M';
+                    document.getElementById('owner-avatar').textContent = name.charAt(0).toUpperCase();
+
+                    document.title = 'Indie Rock Vault — ' + (data.pemilik || 'Misterius');
+
+                    renderAlbums(data.items);
+                })
+                .catch(err => {
+                    console.error('Error loading data:', err);
+                    document.getElementById('catalog-title').textContent = 'Indie Rock Vault';
+                    document.getElementById('catalog-desc').textContent = 'Gagal terhubung ke server backend.';
+                    document.getElementById('owner-name').textContent = 'Misterius';
+                    document.getElementById('owner-nim').textContent = 'NIM: 00000000';
+                    document.getElementById('album-list').innerHTML =
+                        '<p style="color:#f87171;text-align:center;padding:50px 20px;font-size:0.9rem;">Gagal memuat data. Pastikan backend API berjalan di <code style="background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:4px;">' + API_URL + '</code></p>';
+                });
+        }
+
+        // Add album
+        document.getElementById('add-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const album = document.getElementById('input-album').value.trim();
+            const artis = document.getElementById('input-artis').value.trim();
+            const tahun = document.getElementById('input-tahun').value || '-';
+            const genre = document.getElementById('input-genre').value.trim() || 'Indie Rock';
+
+            if (!album || !artis) {
+                showMessage('Nama album dan artis wajib diisi!', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('btn-submit');
+            btn.disabled = true;
+            btn.querySelector('.btn-text').textContent = 'Menambahkan...';
+
+            fetch(`${API_URL}/add-item`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ album, artis, tahun, genre })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    showMessage(data.error, 'error');
+                } else {
+                    showMessage('"' + album + '" berhasil ditambahkan ke koleksi!', 'success');
+                    document.getElementById('input-album').value = '';
+                    document.getElementById('input-artis').value = '';
+                    document.getElementById('input-tahun').value = '';
+                    document.getElementById('input-genre').value = 'Indie Rock';
+                    loadData();
+                }
+            })
+            .catch(err => {
+                console.error('Error adding album:', err);
+                showMessage('Gagal menambahkan album. Cek koneksi ke server.', 'error');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.querySelector('.btn-text').textContent = '+ Tambah ke Koleksi';
+            });
+        });
+
+        function showMessage(text, type) {
+            const msg = document.getElementById('form-message');
+            msg.textContent = text;
+            msg.className = 'form-message ' + type;
+            setTimeout(() => { msg.className = 'form-message'; }, 4000);
+        }
+
+        // Init
+        loadData();
+    </script>
+</body>
+</html>

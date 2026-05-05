@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  # ============================================
+  # Backend API (Flask)
+  # ============================================
+  backend-service:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    container_name: indie-rock-api
+
+  # ============================================
+  # Frontend UI (Nginx)
+  # ============================================
+  frontend-service:
+    build: ./frontend
+    ports:
+      - "8081:80"
+    container_name: indie-rock-ui
+    depends_on:
+      - backend-service
