@@ -25,7 +25,7 @@ pipeline {
         stage('Build & Push') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-creds',
+                    credentialsId: 'dockerhub-login',
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
@@ -52,7 +52,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 withCredentials([file(
-                    credentialsId: 'aks-kubeconfig',
+                    credentialsId: 'aks-config',
                     variable: 'KUBECONFIG'
                 )]) {
                     // Apply semua file YAML Kubernetes
