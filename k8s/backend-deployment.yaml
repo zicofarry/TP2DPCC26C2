@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: zicofarry/indie-rock-backend:latest
+        ports:
+        - containerPort: 5000
+        # ============================================
+        # IDENTITY INJECTION melalui Environment Variable
+        # ============================================
+        env:
+        - name: NAMA_PRAKTIKAN
+          value: "Muhammad 'Azmi Salam"
+        - name: NIM_PRAKTIKAN
+          value: "2406010"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  labels:
+    app: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
