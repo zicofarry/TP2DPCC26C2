@@ -30,17 +30,17 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     // Login ke Docker Hub
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
 
                     // Build & Push Backend Image
-                    sh "docker build -t ${BACKEND_IMAGE}:${BUILD_TAG} -t ${BACKEND_IMAGE}:latest ./backend"
-                    sh "docker push ${BACKEND_IMAGE}:${BUILD_TAG}"
-                    sh "docker push ${BACKEND_IMAGE}:latest"
+                    bat "docker build -t ${BACKEND_IMAGE}:${BUILD_TAG} -t ${BACKEND_IMAGE}:latest ./backend"
+                    bat "docker push ${BACKEND_IMAGE}:${BUILD_TAG}"
+                    bat "docker push ${BACKEND_IMAGE}:latest"
 
                     // Build & Push Frontend Image
-                    sh "docker build -t ${FRONTEND_IMAGE}:${BUILD_TAG} -t ${FRONTEND_IMAGE}:latest ./frontend"
-                    sh "docker push ${FRONTEND_IMAGE}:${BUILD_TAG}"
-                    sh "docker push ${FRONTEND_IMAGE}:latest"
+                    bat "docker build -t ${FRONTEND_IMAGE}:${BUILD_TAG} -t ${FRONTEND_IMAGE}:latest ./frontend"
+                    bat "docker push ${FRONTEND_IMAGE}:${BUILD_TAG}"
+                    bat "docker push ${FRONTEND_IMAGE}:latest"
                 }
             }
         }
@@ -56,15 +56,15 @@ pipeline {
                     variable: 'KUBECONFIG'
                 )]) {
                     // Apply semua file YAML Kubernetes
-                    sh 'kubectl apply -f k8s/'
+                    bat 'kubectl apply -f k8s/'
 
                     // Force update image agar pod di-restart dengan image terbaru
-                    sh "kubectl set image deployment/backend-deployment backend=${BACKEND_IMAGE}:${BUILD_TAG}"
-                    sh "kubectl set image deployment/frontend-deployment frontend=${FRONTEND_IMAGE}:${BUILD_TAG}"
+                    bat "kubectl set image deployment/backend-deployment backend=${BACKEND_IMAGE}:${BUILD_TAG}"
+                    bat "kubectl set image deployment/frontend-deployment frontend=${FRONTEND_IMAGE}:${BUILD_TAG}"
 
                     // Tampilkan status deployment
-                    sh 'kubectl rollout status deployment/backend-deployment --timeout=60s'
-                    sh 'kubectl rollout status deployment/frontend-deployment --timeout=60s'
+                    bat 'kubectl rollout status deployment/backend-deployment --timeout=60s'
+                    bat 'kubectl rollout status deployment/frontend-deployment --timeout=60s'
                 }
             }
         }
